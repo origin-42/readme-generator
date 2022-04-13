@@ -14,12 +14,12 @@ class InputQuestion {
 const questions = [
 
     // Get Title
-    new InputQuestion("title", "What will your title be?", "input"),
+    // new InputQuestion("title", "What will your title be?", "input"),
 
     // Get Description
-    new InputQuestion("description-motivation", "Description: What was your motivation for creating this project?", "input"),
-    new InputQuestion("description-problem", "Description: What problem is this application solving?", "input"),
-    new InputQuestion("description-learned", "Description: What did you learn whilst creating this app?", "input"),
+    // new InputQuestion("description-motivation", "Description: What was your motivation for creating this project?", "input"),
+    // new InputQuestion("description-problem", "Description: What problem is this application solving?", "input"),
+    // new InputQuestion("description-learned", "Description: What did you learn whilst creating this app?", "input"),
 
     // Usage of Table of Contents
    
