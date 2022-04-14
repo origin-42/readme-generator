@@ -14,7 +14,8 @@ function renderLicenseSection(license) {}
 function generateMarkdown(data) {
   console.log(data)
 
-  let unformattedTemplate = []
+  let unformattedTemplate = [];
+  let badgesSection = [`<div align="center">`];
   
   // Add Table of Contents info
   const generateTable = () => {
@@ -72,11 +73,44 @@ function generateMarkdown(data) {
     })
     return howToUse.join("");
   }
+  // Add information on credits
+  const handleCredits = () => {
+    let creditsArr = [`## Credits\n\n`];
+    data.forEach(step => {
+      if (step.addCredInfo) {
+        step.listcredits.forEach(cred => {
+          creditsArr.push(`[${cred.creditTitle}]`)
+          creditsArr.push(`(${cred.creditLink}): `)
+          creditsArr.push(`${cred.creditDescr}\n\n`)
+        })
+      }
+    })
+    return creditsArr.join("");
+  }
+  // Add information for Lisences
+  const handleLisences = () => {
+    data.forEach(step => {
+      if (step.addLisenceInfo) {
+        handleBadges([step.lisences.listLisences.badge])
+      }
+    })
+  }
+  // Handle Badge Section
+  const handleBadgeSection = () => {
+    
+  }
+  // Handle orientation of badges in README.md
+  const handleBadges = (badges) => {
+    badges.forEach(badge => {
+      badgesSection.push(`${badge} `)
+    })
+    
+  }
 
-  // Check steps required and pass to array
+  // Check steps required and pass to render
   data.forEach(step => {
     if (step.title) {
-      unformattedTemplate.push(`# ${step.title}\n\n`)
+      unformattedTemplate.push(`# <div align="center">${step.title}<div>\n\n`)
       unformattedTemplate.push(`${step["description-motivation"]}\n\n`)
       unformattedTemplate.push(`${step["description-problem"]}\n\n`)
       unformattedTemplate.push(`${step["description-learned"]}\n\n`)
@@ -91,9 +125,20 @@ function generateMarkdown(data) {
       // Optional Step: How to Use
     } else if (step.addHowtoUse) {
       unformattedTemplate.push(addHowToUse())
+
+      // Optional Step: Add Credits
+    } else if (step.addCredInfo) {
+      unformattedTemplate.push(handleCredits())
+
+      // Optional Step: Add Lisences
+    } else if (step.addLisenceInfo) {
+      unformattedTemplate.push(handleLisences())
     }
   })
 
+  badgesSection.push("</div>")
+  let formattedBadges = badgesSection.join("");
+  unformattedTemplate.splice(1, 0, `${formattedBadges}\n\n`);
   let htmlTemplate = unformattedTemplate.join("");
 
   return htmlTemplate;

@@ -11,6 +11,14 @@ class InputQuestion {
         this.type = type
     }
 }
+class InputList {
+    constructor(name, message, type, choices) {
+        this.name = name,
+        this.message = message,
+        this.type = type,
+        this.choices = choices
+    }
+}
 const questions = {
 
     description: [
@@ -47,7 +55,7 @@ const questions = {
         new InputQuestion("howToUseImagesText", "Write out a summary for the image you will use: ", "input"),
         new InputQuestion("howToUseImagesTitle", "Add a title to use for your README: ", "input"),
         new InputQuestion("howToUseImagesLink", "Add a link that points to your image location (online or by relative path): ", "input"),
-        new InputQuestion("continue", "Add another image?", "confirm")
+        new InputQuestion("continue", "Add another image? ", "confirm")
     ],
     howToUseVideoPrompt: [
         new InputQuestion("usevideo", "Would you like to add a video?", "confirm")
@@ -56,11 +64,37 @@ const questions = {
         new InputQuestion("howToUseVideoText", "Write out a summary for the video you will use: ", "input"),
         new InputQuestion("howToUseVideoTitle", "Add a title to use for your README: ", "input"),
         new InputQuestion("howToUseVideoLink", "Add a link that points to your video location (online or by relative path): ", "input")
-    ]
+    ],
 
     // Get Credits
+    creditsPrompt: [
+        new InputQuestion("addCredits", "Are there any credits to add?", "confirm")
+    ],
+    useCredits: [
+        new InputQuestion("creditTitle", "Add a short, descriptive title: ", "input"),
+        new InputQuestion("creditLink", "Add a hyperlink to the title: ", "input"),
+        new InputQuestion("creditDescr", "Add a short description to those creditted: ", "input"),
+        new InputQuestion("additionalCredit", "Add another credit? ", "confirm")
+    ],
 
     // Get Lisences
+    lisencesPrompt: [
+        new InputQuestion("addLisences", "Will you add lisences?\n(Lisences dictate how others can use or contribute to your project)\nBe sure to check with moderator or software README file for contibuting to work of others to find recommended lisence ", "confirm")
+    ],
+    useCustomLisences: [
+        new InputQuestion("promptCustomLisences", "Add a custom lisence?\n(skip to choose a from a list of common lisences) ", "confirm")
+    ],
+    customLisences: [
+        new InputQuestion("customLisenceName", "Add lisences name", "input"),
+        new InputQuestion("customLisenceLink", "Add lisences link", "input"),
+        new InputQuestion("additionalCustomLisence", "Add another lisence? ", "confirm")
+    ],
+    addLisences: [
+        new InputQuestion("promptLisences", "Choose from a list of lisences? ", "confirm")
+    ],
+    lisenceList: [
+        new InputList("choicesLisence", "Select which one to add", "list", [new inquirer.Separator("Preservation of copyright & lisence notices\nhttps://choosealicense.com/licenses/mit/"), "MIT Lisence", new inquirer.Separator("Contributors provide an express grant of patent rights & includes copyright & lisence preservation\nhttps://choosealicense.com/licenses/gpl-3.0/"), "GNU General Public License"])
+    ]
 
     // Get Badges
 
@@ -144,7 +178,7 @@ const addHowToUse = () => {
             howToUseSummary()
         } else {
             usageSection.addHowtoUse = false;
-            // promptCredits();
+            promptCredits();
         }
     })
 }
@@ -192,7 +226,8 @@ let howToUseVideoPrompt = () => {
         if (answers.usevideo) {
             howToUseVideo();
         } else {
-            // promptCredits();
+            answersArr.push(usageSection)
+            promptCredits();
         }
     })
 }
@@ -205,13 +240,113 @@ let howToUseVideo = () => {
             howToUseVideoLink: answers.howToUseVideoLink
         });
         answersArr.push(usageSection)
-        writeToFile(answersArr)
-        // promptCredits();
+        promptCredits();
     })
 }
-// let promptCredits = () => {
-
-// }
+// Request credits Info
+const creditsInfo = {
+    addCredInfo: false,
+    addMoreCredits: true,
+    listcredits: [] 
+}
+let promptCredits = () => {
+    inquirer.prompt(questions.creditsPrompt)
+    .then((answers) => {
+        if (answers.addCredits) {
+            creditsInfo.addCredInfo = true;
+            useCredits();
+        } else {
+            lisencesPrompt();
+        }
+    })
+}
+let useCredits = () => {
+    inquirer.prompt(questions.useCredits)
+    .then((answers) => {
+        creditsInfo.addMoreCredits = answers.additionalCredit;
+        creditsInfo.listcredits.push({
+            creditTitle: answers.creditTitle,
+            creditLink: answers.creditLink,
+            creditDescr: answers.creditDescr
+        });
+        if (creditsInfo.addMoreCredits) {
+            useCredits();
+        } else {
+            answersArr.push(creditsInfo)
+            lisencesPrompt();
+        }
+    })
+}
+const lisenceInfo = {
+    addLisenceInfo: false,
+    lisences: {
+        listLisences: {},
+        customLisences: []
+    }
+}
+// Add lisence info
+let lisencesPrompt = () => {
+    inquirer.prompt(questions.lisencesPrompt)
+    .then((answers) => {
+        if (answers.addLisences) {
+            lisenceInfo.addLisenceInfo = true;
+            useCustomLisences();
+        } else {
+            console.log("Be sure to check out https://choosealicense.com/no-permission/ for omitting a lisence on your project")
+            // badgesPrompt();
+        }
+    })
+}
+let useCustomLisences = () => {
+    inquirer.prompt(questions.useCustomLisences)
+    .then((answers) => {
+        if (answers.promptCustomLisences) {
+            customLisences();
+        } else {
+            console.log("Check out non-Software Lisences here https://choosealicense.com/non-software/\n or additional lisences not mentioned https://choosealicense.com/licenses/")
+            addLisences();
+        }
+    }) 
+}
+let customLisences = () => {
+    inquirer.prompt(questions.customLisences)
+    .then((answers) => {
+        lisenceInfo.lisences.customLisences.push({
+            customLisenceName: answers.customLisenceName,
+            customLisenceLink: answers.customLisenceLink
+        })
+        if (answers.additionalCustomLisence) {
+            customLisences();
+        } else {
+            addLisences();
+        }
+    }) 
+}
+let addLisences = () => {
+    inquirer.prompt(questions.addLisences)
+    .then((answers) => {
+        if (answers.promptLisences) {
+            lisenceList();
+        } else {
+            answersArr.push(lisenceInfo);
+            // badgesPrompt();
+        }
+    }) 
+}
+let lisenceList = () => {
+    inquirer.prompt(questions.lisenceList)
+    .then((answers) => {
+        lisenceInfo.lisences.listLisences.name = answers.choicesLisence
+        if (lisenceInfo.lisences.listLisences.name == "MIT Lisence") {
+            lisenceInfo.lisences.listLisences.badge = "[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)";
+        } else if (lisenceInfo.lisences.listLisences.name == "GNU General Public License") {
+            lisenceInfo.lisences.listLisences.badge = "[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)";
+        }
+        answersArr.push(lisenceInfo);
+        writeToFile(answersArr)
+        // badgesPrompt();
+    }) 
+}
 // TODO: Create a function to initialize app
 function init() {
     
