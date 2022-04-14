@@ -338,7 +338,7 @@ let lisenceList = () => {
     .then((answers) => {
         lisenceInfo.lisences.listLisences.name = answers.choicesLisence
         if (lisenceInfo.lisences.listLisences.name == "MIT Lisence") {
-            lisenceInfo.lisences.listLisences.badge = "[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)";
+            lisenceInfo.lisences.listLisences.badge = "[![License: MIT](https://img.shields.io/github/license/adonisjs/adonis-framework?style=for-the-badge)](https://opensource.org/licenses/MIT)";
         } else if (lisenceInfo.lisences.listLisences.name == "GNU General Public License") {
             lisenceInfo.lisences.listLisences.badge = "[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)";
         }
