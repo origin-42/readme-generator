@@ -136,6 +136,7 @@ function generateMarkdown(data) {
     }
   })
 
+  badgesSection.push("[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md)")
   badgesSection.push("</div>")
   let formattedBadges = badgesSection.join("");
   unformattedTemplate.splice(1, 0, `${formattedBadges}\n\n`);

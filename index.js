@@ -102,6 +102,10 @@ const questions = {
 
     // Get How to Contibute
 
+    // Get Features
+
+    // Get Further Implementation
+
     // Extras
 
 };
