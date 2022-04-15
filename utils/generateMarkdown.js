@@ -124,6 +124,22 @@ function generateMarkdown(data) {
     })
     return contributionArr.join("");
   }
+  // Handle Features Section
+  const handleFeatures = () => {
+    let featuresArr = [`## Features\n\n`];
+    let featureArr = [];
+    data.forEach(step => {
+      if (step.addFeatures) {
+        step.features.forEach(feature => {
+          console.log("feature")
+          featureArr.push(`### ${feature.featureTitle}\n\n${feature.featureDescr}\n\n`);
+        });
+        featureArr.push(`\n\n`);
+      }
+    })
+    featuresArr.push(featureArr.join(""));
+    return featuresArr.join("");
+  }
   // Handle orientation of badges in README.md
   const handleBadges = (badges) => {
     badges.forEach(badge => {
@@ -165,6 +181,10 @@ function generateMarkdown(data) {
       // Optional Step: Add Contribution
     } else if (step.addContr) {
       unformattedTemplate.push(handleContribution())
+
+      // Optional Step: Add Features
+    } else if (step.addFeatures) {
+      unformattedTemplate.push(handleFeatures())
     }
   })
 

@@ -112,7 +112,7 @@ const questions = {
         new InputQuestion("addContribution", "Would you like to allow other developers to contribute to the development of this application? ", "confirm"),
     ],
     promptContributionBadge: [
-        new InputQuestion("addBadge", "Would you like to add a badge for the contributor covenant to display in your readme? ", "confirm")
+        new InputQuestion("addBadge", "Would you like to add a badge for the contributor covenant to display in your README.md file? ", "confirm")
     ],
     // Get How to Contibute
     howToContributeDesc: [
@@ -123,9 +123,14 @@ const questions = {
         new InputQuestion("continue", "Add another step?", "confirm")
     ],
     // Get Features
-    
-
-    // Get Further Implementation
+    promptFeatures: [
+        new InputQuestion("addFeatures", "Would you like to add a features section?\n (If your project has a lot of features, list them here)", "confirm")
+    ],
+    addFeatures: [
+        new InputQuestion("featureTitle", "Create a title for this feature: ", "input"),
+        new InputQuestion("featureDescr", "Create a description for this feature: ", "input"),
+        new InputQuestion("continue", "Add another feature?", "confirm")
+    ],
 
     // Extras
 
@@ -416,7 +421,7 @@ let addContribution = () => {
             constributionInfo.addContr = true;
             promptContributionBadge()
         }  else {
-            // Get Features
+            promptFeatures();
         }
     }) 
 }
@@ -425,9 +430,9 @@ const promptContributionBadge = () => {
     .then((answers) => {
         if (answers.addBadge) {
             constributionInfo.addBadge = true;
-            howToContributeDesc()
+            howToContributeDesc();
         } else {
-            howToContributeDesc()
+            howToContributeDesc();
         }
     }) 
 }
@@ -435,7 +440,7 @@ const howToContributeDesc = () => {
     inquirer.prompt(questions.howToContributeDesc)
     .then((answers) => {
         constributionInfo.contrDescr = answers.contributionDescription;
-        howToContributeDetails()
+        howToContributeDetails();
     }) 
 }
 const howToContributeDetails = () => {
@@ -443,13 +448,43 @@ const howToContributeDetails = () => {
     .then((answers) => {
         constributionInfo.contribution.push(answers.contributionStep)
         if (answers.continue) {
-            howToContributeDetails()
+            howToContributeDetails();
         } else {
-            answersArr.push(constributionInfo)
-            writeToFile(answersArr)
-            // Get Features
+            answersArr.push(constributionInfo);
+            promptFeatures();
         }
     })
+}
+const featuresInfo = {
+    addFeatures: false,
+    features: []
+}
+const promptFeatures = () => {
+    inquirer.prompt(questions.promptFeatures)
+    .then((answers) => {
+        if (answers.addFeatures) {
+            featuresInfo.addFeatures = true;
+            addFeatures();
+        } else {
+            // Call next
+        }
+    }) 
+}
+const addFeatures = () => {
+    inquirer.prompt(questions.addFeatures)
+    .then((answers) => {
+        featuresInfo.features.push({
+            featureTitle: answers.featureTitle,
+            featureDescr: answers.featureDescr
+        })
+        if (answers.continue) {
+            addFeatures()
+        } else {
+            answersArr.push(featuresInfo)
+            writeToFile(answersArr)
+            // Call next
+        }
+    }) 
 }
 
 const handleException = () => {
