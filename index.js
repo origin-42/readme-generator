@@ -94,15 +94,36 @@ const questions = {
     ],
     lisenceList: [
         new InputList("choicesLisence", "Select which one to add", "list", [new inquirer.Separator("Preservation of copyright & lisence notices\nhttps://choosealicense.com/licenses/mit/"), "MIT Lisence", new inquirer.Separator("Contributors provide an express grant of patent rights & includes copyright & lisence preservation\nhttps://choosealicense.com/licenses/gpl-3.0/"), "GNU General Public License"])
-    ]
+    ],
 
     // Get Badges
+    promptBadges: [
+        new InputQuestion("addBadges", "Are there any badges to add? ", "confirm")
+    ],
+    createBadges: [
+        new InputQuestion("customBadgeName", "Add badge name", "input"),
+        new InputQuestion("customBadgeIconLink", "Add badge Icon Link", "input"),
+        new InputQuestion("customBadgeDescrLink", "Add badge Description Link", "input"),
+        new InputQuestion("additionalBadge", "Add another badge? ", "confirm")
+    ],
 
     // Get Contribution
-
+    promptContribution: [
+        new InputQuestion("addContribution", "Would you like to allow other developers to contribute to the development of this application? ", "confirm"),
+    ],
+    promptContributionBadge: [
+        new InputQuestion("addBadge", "Would you like to add a badge for the contributor covenant to display in your readme? ", "confirm")
+    ],
     // Get How to Contibute
-
+    howToContributeDesc: [
+        new InputQuestion("contributionDescription", "Specify how other developers can go about contributing to this repository\n Outline steps to fork and download the content\n Firstly,  give a brief description of what they might help with: ", "input")
+    ],
+    howToContributeDetails: [
+        new InputQuestion("contributionStep", "Detail how individual developers can fork this repository or help with the workload, step by step: ", "input"),
+        new InputQuestion("continue", "Add another step?", "confirm")
+    ],
     // Get Features
+    
 
     // Get Further Implementation
 
@@ -297,7 +318,7 @@ let lisencesPrompt = () => {
             useCustomLisences();
         } else {
             console.log("Be sure to check out https://choosealicense.com/no-permission/ for omitting a lisence on your project")
-            // badgesPrompt();
+            addBadges();
         }
     })
 }
@@ -333,7 +354,7 @@ let addLisences = () => {
             lisenceList();
         } else {
             answersArr.push(lisenceInfo);
-            // badgesPrompt();
+            addBadges();
         }
     }) 
 }
@@ -347,9 +368,92 @@ let lisenceList = () => {
             lisenceInfo.lisences.listLisences.badge = "[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)";
         }
         answersArr.push(lisenceInfo);
-        writeToFile(answersArr)
-        // badgesPrompt();
+        addBadges();
     }) 
+}
+// Collect Badges Info
+const badgesInfo = {
+    addBadges: false,
+    badges: []
+}
+let addBadges = () => {
+    inquirer.prompt(questions.promptBadges)
+    .then((answers) => {
+        if (answers.addBadges) {
+            badgesInfo.addBadges = true;
+            createBadge()
+        } else {
+            addContribution()
+        }
+    }) 
+}
+let createBadge = () => {
+    inquirer.prompt(questions.createBadges)
+    .then((answers) => {
+        badgesInfo.badges.push({
+            name: answers.customBadgeName,
+            iconLink: answers.customBadgeIconLink,
+            descrLink: answers.customBadgeDescrLink
+        })
+        if (answers.additionalBadge) {
+            createBadge()
+        } else {
+            answersArr.push(badgesInfo);
+            addContribution()
+        }
+    }) 
+}
+const constributionInfo = {    
+    addContr: false,
+    addBadge: false,
+    contribution: []
+};
+//  Collect Contribution Info
+let addContribution = () => {
+    inquirer.prompt(questions.promptContribution)
+    .then((answers) => {
+        if (answers.addContribution) {
+            constributionInfo.addContr = true;
+            promptContributionBadge()
+        }  else {
+            // Get Features
+        }
+    }) 
+}
+const promptContributionBadge = () => {
+    inquirer.prompt(questions.promptContributionBadge)
+    .then((answers) => {
+        if (answers.addBadge) {
+            constributionInfo.addBadge = true;
+            howToContributeDesc()
+        } else {
+            howToContributeDesc()
+        }
+    }) 
+}
+const howToContributeDesc = () => {
+    inquirer.prompt(questions.howToContributeDesc)
+    .then((answers) => {
+        constributionInfo.contrDescr = answers.contributionDescription;
+        howToContributeDetails()
+    }) 
+}
+const howToContributeDetails = () => {
+    inquirer.prompt(questions.howToContributeDetails)
+    .then((answers) => {
+        constributionInfo.contribution.push(answers.contributionStep)
+        if (answers.continue) {
+            howToContributeDetails()
+        } else {
+            answersArr.push(constributionInfo)
+            writeToFile(answersArr)
+            // Get Features
+        }
+    })
+}
+
+const handleException = () => {
+    // Handle incorrect data submission or accidental data submission
 }
 // TODO: Create a function to initialize app
 function init() {

@@ -97,14 +97,38 @@ function generateMarkdown(data) {
   }
   // Handle Badge Section
   const handleBadgeSection = () => {
-    
+    data.forEach(step => {
+      if (step.addBadges) {
+        step.badges.forEach(badge => {
+          handleBadges([`[![${badge.customBadgeName}](${badge.customBadgeIconLink})](${badge.customBadgeDescrLink})`]);
+        })
+      }
+    })
+  }
+  // Handle Contribution Section
+  const handleContribution = () => {
+    let contributionArr = [`## Contribution\n\n`];
+    data.forEach(step => {
+      if (step.addContr) {
+        if (step.addBadge) {
+          handleBadges([`[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)`])
+        }
+        contributionArr.push(`${step.contrDescr}\n\n`);
+        contributionArr.push("### How to Contribute\n\n");
+        contributionArr.push("```\n");
+        step.contribution.forEach(step => {
+          contributionArr.push(`${step}\n`)
+        })
+        contributionArr.push("```\n\n");
+      }
+    })
+    return contributionArr.join("");
   }
   // Handle orientation of badges in README.md
   const handleBadges = (badges) => {
     badges.forEach(badge => {
       badgesSection.push(`${badge} `)
     })
-    
   }
 
   // Check steps required and pass to render
@@ -133,11 +157,18 @@ function generateMarkdown(data) {
       // Optional Step: Add Lisences
     } else if (step.addLisenceInfo) {
       unformattedTemplate.push(handleLisences())
+
+      // Optional Step: Add Custom Badges
+    } else if (step.addBadges) {
+      unformattedTemplate.push(handleBadgeSection())
+
+      // Optional Step: Add Contribution
+    } else if (step.addContr) {
+      unformattedTemplate.push(handleContribution())
     }
   })
 
-  badgesSection.push("[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md)")
-  badgesSection.push("</div>")
+  badgesSection.push("</div>");
   let formattedBadges = badgesSection.join("");
   unformattedTemplate.splice(1, 0, `${formattedBadges}\n\n`);
   let htmlTemplate = unformattedTemplate.join("");
