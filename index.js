@@ -98,20 +98,20 @@ const questions = {
         new InputQuestion("additionalCredit", "Add another credit? ", "confirm")
     ],
 
-    // Get Lisences
-    lisencesPrompt: [
-        new InputQuestion("addLisences", "Will you add lisences?\n(Lisences dictate how others can use or contribute to your project)\nBe sure to check with moderator or software README file for contibuting to work of others to find recommended lisence ", "confirm")
+    // Get Licenses
+    licensesPrompt: [
+        new InputQuestion("addLicenses", "Will you add licenses?\n(Licenses dictate how others can use or contribute to your project)\nBe sure to check with moderator or software README file for contibuting to work of others to find recommended lisence ", "confirm")
     ],
-    useCustomLisences: [
-        new InputQuestion("promptCustomLisences", "Add a custom lisence?\n(skip to choose a from a list of common lisences) ", "confirm")
+    useCustomLicenses: [
+        new InputQuestion("promptCustomLicenses", "Add a custom lisence?\n(skip to choose a from a list of common licenses) ", "confirm")
     ],
-    customLisences: [
-        new InputQuestion("customLisenceName", "Add lisences name", "input"),
-        new InputQuestion("customLisenceLink", "Add lisences link", "input"),
+    customLicenses: [
+        new InputQuestion("customLisenceName", "Add licenses name", "input"),
+        new InputQuestion("customLisenceLink", "Add licenses link", "input"),
         new InputQuestion("additionalCustomLisence", "Add another lisence? ", "confirm")
     ],
-    addLisences: [
-        new InputQuestion("promptLisences", "Choose from a list of lisences? ", "confirm")
+    addLicenses: [
+        new InputQuestion("promptLicenses", "Choose from a list of licenses? ", "confirm")
     ],
     lisenceList: [
         new InputList("choicesLisence", "Select which one to add", "list", [new inquirer.Separator("Preservation of copyright & lisence notices\nhttps://choosealicense.com/licenses/mit/"), "MIT Lisence", new inquirer.Separator("Contributors provide an express grant of patent rights & includes copyright & lisence preservation\nhttps://choosealicense.com/licenses/gpl-3.0/"), "GNU General Public License"])
@@ -156,6 +156,11 @@ const questions = {
     // Extras
     promptExtras: [
         new InputQuestion("addExtras", "Would you like to add any additional information or sections?\n (A title for Extras will be passed to the README.md file created to enter additional information) ", "confirm"),
+    ],
+    promptHomeLink: [
+        new InputQuestion("addHomePage", "It is recommended if you have an online web page to add an image and link for it. Add now? ", "confirm"),
+        new InputQuestion("addHomePageTitle", "Create a title describing the location or relevance of this image: ", "input"),
+        new InputQuestion("addHomePageLink", "Add the image link: ", "input")
     ]
 
 };
@@ -243,16 +248,24 @@ const changesDetails = () => {
         }
     })
 }
+let tableDenied = true;
 // Prompt user if they need a Table of Contents
 const promptTablOCon = () => {
     inquirer.prompt(questions["table-of-contents"])
     .then((answers) => {
-        answersArr.push(answers)
-        promptInstallation()
+        if (answers.tableofcontents) {
+            answersArr.push(answers)
+            promptInstallation()
+        } else {
+            tableDenied = false;
+            answersArr.push(answers)
+            promptInstallation()
+        }
     })
 }
 // Prompt user for Installation Details
-const installationArray = {    
+const installationArray = {   
+    addInstallation: true, 
     continue: false,
     installation: []
 };
@@ -372,7 +385,7 @@ let promptCredits = () => {
             creditsInfo.addCredInfo = true;
             useCredits();
         } else {
-            lisencesPrompt();
+            licensesPrompt();
         }
     })
 }
@@ -389,76 +402,76 @@ let useCredits = () => {
             useCredits();
         } else {
             answersArr.push(creditsInfo)
-            lisencesPrompt();
+            licensesPrompt();
         }
     })
 }
-const lisenceInfo = {
-    addLisenceInfo: false,
-    lisences: {
-        listLisences: {},
-        customLisences: []
+const licenseInfo = {
+    addLicenseInfo: false,
+    licenses: {
+        listLicenses: {},
+        customLicenses: []
     }
 }
 // Add lisence info
-let lisencesPrompt = () => {
-    inquirer.prompt(questions.lisencesPrompt)
+let licensesPrompt = () => {
+    inquirer.prompt(questions.licensesPrompt)
     .then((answers) => {
-        if (answers.addLisences) {
-            lisenceInfo.addLisenceInfo = true;
-            useCustomLisences();
+        if (answers.addLicenses) {
+            licenseInfo.addLicenseInfo = true;
+            useCustomLicenses();
         } else {
             console.log("Be sure to check out https://choosealicense.com/no-permission/ for omitting a lisence on your project")
             addBadges();
         }
     })
 }
-let useCustomLisences = () => {
-    inquirer.prompt(questions.useCustomLisences)
+let useCustomLicenses = () => {
+    inquirer.prompt(questions.useCustomLicenses)
     .then((answers) => {
-        if (answers.promptCustomLisences) {
-            customLisences();
+        if (answers.promptCustomLicenses) {
+            customLicenses();
         } else {
-            console.log("Check out non-Software Lisences here https://choosealicense.com/non-software/\n or additional lisences not mentioned https://choosealicense.com/licenses/")
-            addLisences();
+            console.log("Check out non-Software Licenses here https://choosealicense.com/non-software/\n or additional licenses not mentioned https://choosealicense.com/licenses/")
+            addLicenses();
         }
     }) 
 }
-let customLisences = () => {
-    inquirer.prompt(questions.customLisences)
+let customLicenses = () => {
+    inquirer.prompt(questions.customLicenses)
     .then((answers) => {
-        lisenceInfo.lisences.customLisences.push({
-            customLisenceName: answers.customLisenceName,
-            customLisenceLink: answers.customLisenceLink
+        licenseInfo.licenses.customLicenses.push({
+            customLicenseName: answers.customLicenseName,
+            customLicenseLink: answers.customLicenseLink
         })
-        if (answers.additionalCustomLisence) {
-            customLisences();
+        if (answers.additionalCustomLicense) {
+            customLicenses();
         } else {
-            addLisences();
+            addLicenses();
         }
     }) 
 }
-let addLisences = () => {
-    inquirer.prompt(questions.addLisences)
+let addLicenses = () => {
+    inquirer.prompt(questions.addLicenses)
     .then((answers) => {
-        if (answers.promptLisences) {
-            lisenceList();
+        if (answers.promptLicenses) {
+            licenseList();
         } else {
-            answersArr.push(lisenceInfo);
+            answersArr.push(licenseInfo);
             addBadges();
         }
     }) 
 }
-let lisenceList = () => {
-    inquirer.prompt(questions.lisenceList)
+let licenceList = () => {
+    inquirer.prompt(questions.licenseList)
     .then((answers) => {
-        lisenceInfo.lisences.listLisences.name = answers.choicesLisence
-        if (lisenceInfo.lisences.listLisences.name == "MIT Lisence") {
-            lisenceInfo.lisences.listLisences.badge = "[![License: MIT](https://img.shields.io/github/license/adonisjs/adonis-framework?style=for-the-badge)](https://opensource.org/licenses/MIT)";
-        } else if (lisenceInfo.lisences.listLisences.name == "GNU General Public License") {
-            lisenceInfo.lisences.listLisences.badge = "[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)";
+        licenseInfo.licenses.listLicenses.name = answers.choicesLicense
+        if (licenseInfo.licenses.listLicenses.name == "MIT License") {
+            licenseInfo.licenses.listLicenses.badge = "[![License: MIT](https://img.shields.io/github/license/adonisjs/adonis-framework?style=for-the-badge)](https://opensource.org/licenses/MIT)";
+        } else if (licenseInfo.licenses.listLicenses.name == "GNU General Public License") {
+            licenseInfo.licenses.listLicenses.badge = "[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)";
         }
-        answersArr.push(lisenceInfo);
+        answersArr.push(licenseInfo);
         addBadges();
     }) 
 }
@@ -576,11 +589,44 @@ const extraSections = () => {
     .then((answers) => {
         if (answers.addExtras) {
             answersArr.push({addExtras: true});
-            writeToFile(answersArr);
+            addHomePage();
         } else {
-            writeToFile(answersArr);
+            addHomePage();
         }
     }) 
+}
+const homePageInfo = {
+    addhomePage: false
+}
+const addHomePage = () => {
+    inquirer.prompt(questions.promptHomeLink)
+    .then((answers) => {
+        if (answers.addHomePage) {
+            homePageInfo.homePageTitle = answers.addHomePageTitle;
+            homePageInfo.homePageLink = answers.addHomePageLink;
+            homePageInfo.addhomePage = true;
+            answersArr.push(homePageInfo);
+            checkTable();
+        } else {
+            checkTable();
+        }
+    }) 
+}
+const checkTable = () => {
+    if (!tableDenied) {
+        console.log(`Table of contents is helpful for long README files. Are you happy to omit the table of contents?`);
+        inquirer.prompt(questions["table-of-contents"])
+        .then((answers) => {
+            if (answers.tableofcontents) {
+                answersArr.push(answers);
+                writeToFile(answersArr);
+            } else {
+                writeToFile(answersArr);
+            }
+        })
+    } else {
+        writeToFile(answersArr);
+    }
 }
 
 const handleException = () => {

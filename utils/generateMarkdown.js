@@ -1,15 +1,3 @@
-// TODO: Create a function that returns a license badge based on which license is passed in
-// If there is no license, return an empty string
-function renderLicenseBadge(license) {}
-
-// TODO: Create a function that returns the license link
-// If there is no license, return an empty string
-function renderLicenseLink(license) {}
-
-// TODO: Create a function that returns the license section of README
-// If there is no license, return an empty string
-function renderLicenseSection(license) {}
-
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
   console.log(data)
@@ -21,23 +9,21 @@ function generateMarkdown(data) {
   
   // Add Table of Contents info
   const generateTable = () => {
-    let table = [`## Table of Contents\n\n`, `[Installation](#Installation)\n`]
+    let table = [`## Table of Contents\n\n`, `* [Installation](#installation)\n`]
 
     data.forEach(step => {
-      if (step.usage) {
-        table.push(`[How to Use](#How to Use)\n`)
-      } else if (step.credits) {
-        table.push(`[Credits](#Credits)\n`)
-      } else if (step.lisences) {
-        table.push(`[Lisences](#Lisences)\n`)
-      } else if (step.badges) {
-        table.push(`[Badges](#Badges)\n`)
-      } else if (step.contribution) {
-        table.push(`[Contribution](#Contribution)\n`)
-      } else if (step.howToContibute) {
-        table.push(`[How to Contribute](#How to Contribute)\n`)
-      } 
-    })
+      if (step.howToUse) {
+        table.push(`* [How to Use](#how-to-use)\n`);
+      } else if (step.addCredInfo) {
+        table.push(`* [Credits](#credits)\n`);
+      } else if (step.addContr) {
+        table.push(`* [Contribution](#contribution)\n`);
+      } else if (step.addFeatures) {
+        table.push(`* [Features](#features)\n`);
+      } else if (step.addExtras) {
+        table.push(`* [Extras](#extras)\n`);
+      }
+    });
 
     return table.join("")
   }
@@ -59,12 +45,12 @@ function generateMarkdown(data) {
     data.forEach(step => {
       if (step.addDevInfo) {
         step.furtherDev.forEach(dev => {
-          developments.push(`${dev.furtherDev}\n\n`);
+          developments.push(`- ${dev.furtherDev}\n\n`);
         });
       }
       if (step.addDevInfo) {
         step.furtherChanges.forEach(change => {
-          changes.push(`${change.furtherChange}\n\n`);
+          changes.push(`- ${change.furtherChange}\n\n`);
         });
       }
     });
@@ -93,14 +79,14 @@ function generateMarkdown(data) {
       if (step.addHowtoUse) {
         howToUse.push(`${step.usageSummary}\n\n`)
         step.usageDetails.photos.forEach(photo => {
-          howToUse.push(`${photo.howToUseImagesText}\n\n`)
-          howToUse.push(`![snippet](${photo.howToUseImagesLink})\n`)
-          howToUse.push(`### ${photo.howToUseImagesTitle}\n\n`)
+          howToUse.push(`### ${photo.howToUseImagesTitle}\n\n`);
+          howToUse.push(`${photo.howToUseImagesText}\n\n`);
+          howToUse.push(`![snippet](${photo.howToUseImagesLink})\n\n`);
         })
         step.usageDetails.video.forEach(video => {
-          howToUse.push(`${video.howToUseVideoText}\n\n`)
-          howToUse.push(`![snippet](${video.howToUseVideoLink})\n`)
-          howToUse.push(`### ${video.howToUseVideoTitle}\n\n`)
+          howToUse.push(`### ${video.howToUseVideoTitle}\n\n`);
+          howToUse.push(`${video.howToUseVideoText}\n\n`);
+          howToUse.push(`![snippet](${video.howToUseVideoLink})\n\n`);
         })
       }
     })
@@ -120,11 +106,11 @@ function generateMarkdown(data) {
     })
     return creditsArr.join("");
   }
-  // Add information for Lisences
-  const handleLisences = () => {
+  // Add information for Licenses
+  const handleLicences = () => {
     data.forEach(step => {
       if (step.addLisenceInfo) {
-        handleBadges([step.lisences.listLisences.badge])
+        handleBadges([step.licenses.listLicenses.badge])
       }
     })
   }
@@ -133,7 +119,7 @@ function generateMarkdown(data) {
     data.forEach(step => {
       if (step.addBadges) {
         step.badges.forEach(badge => {
-          handleBadges([`[![${badge.customBadgeName}](${badge.customBadgeIconLink})](${badge.customBadgeDescrLink})`]);
+          handleBadges([`[![${badge.name}](${badge.iconLink})](${badge.descrLink})`]);
         })
       }
     })
@@ -181,6 +167,16 @@ function generateMarkdown(data) {
       badgesSection.push(`${badge} `)
     })
   }
+  const handleHomePage = () => {
+    let homePageArr = [];
+    data.forEach(step => {
+      if (step.addhomePage) {
+        homePageArr.push(`[${step.homePageTitle}](${step.homePageLink})\n`);
+        homePageArr.push(`![snippet](${step.homePageLink})\n\n`);
+      }
+    })
+    return homePageArr.join("")
+  }
 
   // Check steps required and pass to render
   data.forEach(step => {
@@ -213,9 +209,9 @@ function generateMarkdown(data) {
     } else if (step.addCredInfo) {
       unformattedTemplate.push(handleCredits());
 
-      // Optional Step: Add Lisences
+      // Optional Step: Add Licenses
     } else if (step.addLisenceInfo) {
-      unformattedTemplate.push(handleLisences());
+      unformattedTemplate.push(handleLicences());
 
       // Optional Step: Add Custom Badges
     } else if (step.addBadges) {
@@ -232,13 +228,17 @@ function generateMarkdown(data) {
       // Optional Step: Add Extras
     } else if (step.addExtras) {
       unformattedTemplate.push(`## Extras\n\n`);
+
+      // Optional Step: Add Home Page Image
+    } else if (step.addhomePage) {
+      unformattedTemplate.push(handleHomePage());
     }
   })
 
   if (renderBadges) {
     badgesSection.push("</div>");
     let formattedBadges = badgesSection.join("");
-    unformattedTemplate.splice(1, 0, `${formattedBadges}\n\n`);
+    unformattedTemplate.splice(1, 0, `${formattedBadges}\n\n\n`);
   }
   let htmlTemplate = unformattedTemplate.join("");
 

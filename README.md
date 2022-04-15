@@ -1,91 +1,95 @@
-# <div align="center">Readdit<div>
+# <div align="center">dawd<div>
 
-<div align="center">[![License: MIT](https://img.shields.io/github/license/adonisjs/adonis-framework?style=for-the-badge)](https://opensource.org/licenses/MIT) [![undefined](undefined)](undefined) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md) </div>
+<div align="center">[![License: MIT](https://img.shields.io/github/license/adonisjs/adonis-framework?style=for-the-badge)](https://opensource.org/licenses/MIT) [![fsefawef](afwefawe)](ergerg) [![afwefawe](fwefawe)](fawefwef) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md) </div>
 
-Motivation
 
-Problem
+fsae
 
-Learned
+fseaf
+
+sefse
 
 ## Requirements
 
-Requirements
+fsefew
 
 ## Further Developments
 
 ### Additional Features
 
-further Additions
-
-Futher additions 2
+- fefweafwe
 
 ### Further Changes
 
-Further Changes
+- fwaefew
 
-Further Changes 2
+- fwefwef
+
+- afwefwe
 
 ## Table of Contents
 
-[Installation](#Installation)
-[Lisences](#Lisences)
-[Badges](#Badges)
-[Contribution](#Contribution)
+* [Installation](#installation)
+* [Credits](#credits)
+* [Lisences](#Lisences)
+* [Contribution](#contribution)
+* [Features](#features)
+* [Extras](#extras)
 
 ## Installation
 
 ```
-Git init
-git branch
+fwef
+wvevwev
+vesawfe
 ```
 
 ## How to Use
 
-How to use my app
+ecawefew
 
-Image one sum
+### fwaefwef
 
-![snippet](Link for image)
-### Image one
+aeswcef
 
-Sumage 2 sum
+![snippet](fawefawe)
 
-![snippet](Image 2 path)
-### Image 2
+### fergerg
 
-Video one
+awefawe
 
-![snippet](Vid one path)
-### Vid one title
+![snippet](eragrea)
 
 ## Credits
 
-[Me](Mine): My credits
+[fawefwa](efawef): waefewf
 
 ## Contribution
 
-Steps to fork
+afwefwea
 
 ### How to Contribute
 
 ```
-Step one fork
-Step two fork
-Step three fork
+ffwaefawe
+fweafawef
+fwaefwef
 ```
 
 ## Features
 
-### Feature one
+### agfewrger
 
-Feature one descr
+geragrg
 
-### Feature 2
+### feawf
 
-Feature 2 descr
+waegawer
 
 
 
 ## Extras
+
+[agwergwea](gwagewg)
+![snippet](gwagewg)
 
