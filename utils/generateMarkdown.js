@@ -16,6 +16,8 @@ function generateMarkdown(data) {
 
   let unformattedTemplate = [];
   let badgesSection = [`<div align="center">`];
+  let renderBadges = false;
+  
   
   // Add Table of Contents info
   const generateTable = () => {
@@ -38,6 +40,37 @@ function generateMarkdown(data) {
     })
 
     return table.join("")
+  }
+  // Add Requirements Steps
+  const handleRequirements = () => {
+    let requirements = [];
+    data.forEach(step => {
+      if (step.addRequired) {
+        requirements.push(`## Requirements\n\n${step.requirements}\n\n`);
+      }
+    })
+    return requirements;
+  }
+  // Add Further Development Steps
+  const handleDevelopment = () => {
+    let devSection = [`## Further Developments\n\n`];
+    let developments = [`### Additional Features\n\n`];
+    let changes = [`### Further Changes\n\n`];
+    data.forEach(step => {
+      if (step.addDevInfo) {
+        step.furtherDev.forEach(dev => {
+          developments.push(`${dev.furtherDev}\n\n`);
+        });
+      }
+      if (step.addDevInfo) {
+        step.furtherChanges.forEach(change => {
+          changes.push(`${change.furtherChange}\n\n`);
+        });
+      }
+    });
+    devSection.push(developments.join(""));
+    devSection.push(changes.join(""));
+    return devSection.join("");
   }
   // Add formatted Installation steps
   const addInstallation = () => {
@@ -131,7 +164,6 @@ function generateMarkdown(data) {
     data.forEach(step => {
       if (step.addFeatures) {
         step.features.forEach(feature => {
-          console.log("feature")
           featureArr.push(`### ${feature.featureTitle}\n\n${feature.featureDescr}\n\n`);
         });
         featureArr.push(`\n\n`);
@@ -142,6 +174,9 @@ function generateMarkdown(data) {
   }
   // Handle orientation of badges in README.md
   const handleBadges = (badges) => {
+    if (!renderBadges) {
+      renderBadges = true;
+    }
     badges.forEach(badge => {
       badgesSection.push(`${badge} `)
     })
@@ -155,42 +190,56 @@ function generateMarkdown(data) {
       unformattedTemplate.push(`${step["description-problem"]}\n\n`)
       unformattedTemplate.push(`${step["description-learned"]}\n\n`)
 
-      // Optional Step: Installation
+      // Optional Step: Handle Requirements
+    } else if (step.addRequired) {
+      unformattedTemplate.push(handleRequirements());
+
+      // Optional Step: Handle Development
+    } else if (step.addDevInfo) {
+      unformattedTemplate.push(handleDevelopment());
+
+      // Installation
     } else if (step.tableofcontents) {
-      unformattedTemplate.push(`${generateTable()}\n`)
+      unformattedTemplate.push(`${generateTable()}\n`);
 
     } else if (step.addInstallSteps) {
-      unformattedTemplate.push(addInstallation())
+      unformattedTemplate.push(addInstallation());
 
       // Optional Step: How to Use
     } else if (step.addHowtoUse) {
-      unformattedTemplate.push(addHowToUse())
+      unformattedTemplate.push(addHowToUse());
 
       // Optional Step: Add Credits
     } else if (step.addCredInfo) {
-      unformattedTemplate.push(handleCredits())
+      unformattedTemplate.push(handleCredits());
 
       // Optional Step: Add Lisences
     } else if (step.addLisenceInfo) {
-      unformattedTemplate.push(handleLisences())
+      unformattedTemplate.push(handleLisences());
 
       // Optional Step: Add Custom Badges
     } else if (step.addBadges) {
-      unformattedTemplate.push(handleBadgeSection())
+      unformattedTemplate.push(handleBadgeSection());
 
       // Optional Step: Add Contribution
     } else if (step.addContr) {
-      unformattedTemplate.push(handleContribution())
+      unformattedTemplate.push(handleContribution());
 
       // Optional Step: Add Features
     } else if (step.addFeatures) {
-      unformattedTemplate.push(handleFeatures())
+      unformattedTemplate.push(handleFeatures());
+
+      // Optional Step: Add Extras
+    } else if (step.addExtras) {
+      unformattedTemplate.push(`## Extras\n\n`);
     }
   })
 
-  badgesSection.push("</div>");
-  let formattedBadges = badgesSection.join("");
-  unformattedTemplate.splice(1, 0, `${formattedBadges}\n\n`);
+  if (renderBadges) {
+    badgesSection.push("</div>");
+    let formattedBadges = badgesSection.join("");
+    unformattedTemplate.splice(1, 0, `${formattedBadges}\n\n`);
+  }
   let htmlTemplate = unformattedTemplate.join("");
 
   return htmlTemplate;

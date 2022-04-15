@@ -30,6 +30,27 @@ const questions = {
         new InputQuestion("description-learned", "Description: What did you learn whilst creating this app? ", "input"),
     ],
 
+    // Get Further Development Details
+    furtherDevelopment: [
+        new InputQuestion("addDevelopment", "Will you be updating features?\n (Here you might detail how you will update your appliciation in the future)", "confirm")
+    ],
+
+    developmentDetails: [
+        new InputQuestion("development", "Add information regarding further additions to this project: ", "input"),
+        new InputQuestion("additionalDevelopment", "Add additonal developments? ", "confirm")
+    ],
+
+    changesDetails: [
+        new InputQuestion("changes", "Add information regarding further changes to this project: ", "input"),
+        new InputQuestion("additionalChanges", "Add additional changes? ", "confirm")
+    ],
+
+    // Get Required Info
+    requiredPrograms: [
+        new InputQuestion("requirementsSection", "Does this application require this section? ", "confirm"),
+        new InputQuestion("required", "Detail what is required to run this application for the average user: ", "input")
+    ],
+
     // Usage of Table of Contents
     "table-of-contents": [
         new InputQuestion("tableofcontents", "Will you need a Table of Contents?", "confirm")
@@ -133,6 +154,9 @@ const questions = {
     ],
 
     // Extras
+    promptExtras: [
+        new InputQuestion("addExtras", "Would you like to add any additional information or sections?\n (A title for Extras will be passed to the README.md file created to enter additional information) ", "confirm"),
+    ]
 
 };
 
@@ -154,7 +178,69 @@ const promptDescription = () => {
     inquirer.prompt(questions.description)
     .then((answers) => {
         answersArr.push(answers)
-        promptTablOCon()
+        console.log(" Add information pertaining to any requirements for this application to run");
+        console.log(" (Here you can specify to a user (not a developer), what is required to run this application, if they so desire and it is permissible)");
+        console.log(" (Note these requirements and consider adding badges later to indicate these requirements)");
+        requirements()
+    })
+}
+// Prompt user for requirements
+const requirements = () => {
+    inquirer.prompt(questions.requiredPrograms)
+    .then((answers) => {
+        if (answers.requirementsSection) {
+            answersArr.push({
+                addRequired: true,
+                requirements: answers.required
+            })
+            furtherDevelopment();
+        } else {
+            furtherDevelopment();
+        }
+    })
+}
+// Prompt Further Development Details
+const developmentInfo = {
+    addDevInfo: false,
+    furtherDev: [],
+    furtherChanges: []
+}
+const furtherDevelopment = () => {
+    inquirer.prompt(questions.furtherDevelopment)
+    .then((answers) => {
+        if (answers.addDevelopment) {
+            developmentInfo.addDevInfo = true;
+            developmentDetails();
+        } else {
+            promptTablOCon();
+        }
+    })
+}
+const developmentDetails = () => {
+    inquirer.prompt(questions.developmentDetails)
+    .then((answers) => {
+        developmentInfo.furtherDev.push({
+            furtherDev: answers.development,
+        });
+        if (answers.additionalDevelopment) {
+            developmentDetails();
+        } else {
+            changesDetails();
+        }
+    })
+}
+const changesDetails = () => {
+    inquirer.prompt(questions.changesDetails)
+    .then((answers) => {
+        developmentInfo.furtherChanges.push({
+            furtherChange: answers.changes,
+        });
+        if (answers.additionalChanges) {
+            changesDetails();
+        } else {
+            answersArr.push(developmentInfo);
+            promptTablOCon();
+        }
     })
 }
 // Prompt user if they need a Table of Contents
@@ -466,7 +552,7 @@ const promptFeatures = () => {
             featuresInfo.addFeatures = true;
             addFeatures();
         } else {
-            // Call next
+            extraSections();
         }
     }) 
 }
@@ -480,9 +566,19 @@ const addFeatures = () => {
         if (answers.continue) {
             addFeatures()
         } else {
-            answersArr.push(featuresInfo)
-            writeToFile(answersArr)
-            // Call next
+            answersArr.push(featuresInfo);
+            extraSections();
+        }
+    }) 
+}
+const extraSections = () => {
+    inquirer.prompt(questions.promptExtras)
+    .then((answers) => {
+        if (answers.addExtras) {
+            answersArr.push({addExtras: true});
+            writeToFile(answersArr);
+        } else {
+            writeToFile(answersArr);
         }
     }) 
 }
