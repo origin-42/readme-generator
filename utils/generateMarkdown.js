@@ -142,7 +142,7 @@ function generateMarkdown(data) {
     data.forEach(step => {
       if (step.addContr) {
         if (step.addBadge) {
-          handleBadges([`[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)`])
+          handleBadges([`[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md)`])
         };
         contributionArr.push(`${step.contrDescr}\n\n`);
         contributionArr.push("### How to Contribute\n\n");
