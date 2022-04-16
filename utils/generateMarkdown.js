@@ -3,9 +3,10 @@ function generateMarkdown(data) {
   console.log(data)
 
   let unformattedTemplate = [];
-  let badgesSection = [`<div align="center">`];
+  let badgesSection = [`<div align="center">\n\n`];
   let renderBadges = false;
-  
+  let requirementsRun = false;
+  let developmentRun = false;
   
   // Add Table of Contents info
   const generateTable = () => {
@@ -24,11 +25,11 @@ function generateMarkdown(data) {
         table.push(`* [Extras](#extras)\n`);
       }
     });
-
     return table.join("")
   }
   // Add Requirements Steps
   const handleRequirements = () => {
+    requirementsRun = true;
     let requirements = [];
     data.forEach(step => {
       if (step.addRequired) {
@@ -39,6 +40,7 @@ function generateMarkdown(data) {
   }
   // Add Further Development Steps
   const handleDevelopment = () => {
+    developmentRun = true;
     let devSection = [`## Further Developments\n\n`];
     let developments = [`### Additional Features\n\n`];
     let changes = [`### Further Changes\n\n`];
@@ -158,6 +160,24 @@ function generateMarkdown(data) {
     featuresArr.push(featureArr.join(""));
     return featuresArr.join("");
   }
+  // Handle Tests Section
+  const handleTests = () => {
+    let testsArr = [`## Tests\n\n`];
+    data.forEach(step => {
+      if (step.addTests) {
+        step.tests.forEach(test => {
+          testsArr.push(`### ${test.testTitle}\n\n${test.testDescr}\n\n` + "```\n");
+          let splitTestsArr = test.testSteps.split(">>");
+          splitTestsArr.forEach(testSplit => {
+            console.log(`${testSplit}\n`)
+            testsArr.push(`${testSplit}\n`);
+          })
+          testsArr.push("```\n\n");
+        })
+      }
+    })
+    return testsArr;
+  }
   // Handle orientation of badges in README.md
   const handleBadges = (badges) => {
     if (!renderBadges) {
@@ -170,6 +190,9 @@ function generateMarkdown(data) {
   const handleHomePage = () => {
     let homePageArr = [];
     data.forEach(step => {
+      if (step.addExtras === false) {
+        unformattedTemplate.push(`## Extras\n\n`);
+      }
       if (step.addhomePage) {
         homePageArr.push(`[${step.homePageTitle}](${step.homePageLink})\n`);
         homePageArr.push(`![snippet](${step.homePageLink})\n\n`);
@@ -181,7 +204,7 @@ function generateMarkdown(data) {
   // Check steps required and pass to render
   data.forEach(step => {
     if (step.title) {
-      unformattedTemplate.push(`# <div align="center">${step.title}<div>\n\n`)
+      unformattedTemplate.push(`# <div align="center">\n\n${step.title}\n\n<div>\n\n`)
       unformattedTemplate.push(`${step["description-motivation"]}\n\n`)
       unformattedTemplate.push(`${step["description-problem"]}\n\n`)
       unformattedTemplate.push(`${step["description-learned"]}\n\n`)
@@ -196,7 +219,13 @@ function generateMarkdown(data) {
 
       // Installation
     } else if (step.tableofcontents) {
-      unformattedTemplate.push(`${generateTable()}\n`);
+      if (requirementsRun && developmentRun) {
+        unformattedTemplate.splice(6, 0, `${generateTable()}\n`);
+      } else if (requirementsRun && !developmentRun || !requirementsRun && developmentRun) {
+        unformattedTemplate.splice(5, 0, `${generateTable()}\n`);
+      } else {
+        unformattedTemplate.splice(4, 0, `${generateTable()}\n`);
+      }
 
     } else if (step.addInstallSteps) {
       unformattedTemplate.push(addInstallation());
@@ -225,6 +254,10 @@ function generateMarkdown(data) {
     } else if (step.addFeatures) {
       unformattedTemplate.push(handleFeatures());
 
+      // Optional Step: Add Tests
+    } else if (step.addTests) {
+      unformattedTemplate.push(handleTests());
+
       // Optional Step: Add Extras
     } else if (step.addExtras) {
       unformattedTemplate.push(`## Extras\n\n`);
@@ -236,7 +269,7 @@ function generateMarkdown(data) {
   })
 
   if (renderBadges) {
-    badgesSection.push("</div>");
+    badgesSection.push("\n\n</div>");
     let formattedBadges = badgesSection.join("");
     unformattedTemplate.splice(1, 0, `${formattedBadges}\n\n\n`);
   }

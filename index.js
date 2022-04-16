@@ -46,8 +46,10 @@ const questions = {
     ],
 
     // Get Required Info
+    requiredPrompt: [
+        new InputQuestion("requirementsSection", "Does this application require this section? ", "confirm")
+    ],
     requiredPrograms: [
-        new InputQuestion("requirementsSection", "Does this application require this section? ", "confirm"),
         new InputQuestion("required", "Detail what is required to run this application for the average user: ", "input")
     ],
 
@@ -152,13 +154,33 @@ const questions = {
         new InputQuestion("featureDescr", "Create a description for this feature: ", "input"),
         new InputQuestion("continue", "Add another feature?", "confirm")
     ],
-
+    // Get Tests
+    promptTests: [
+        new InputQuestion("addTests", "Have you written any tests?\n Here you can describe to users how to run your tests ", "confirm")
+    ],
+    addTests: [
+        new InputQuestion("testTitle", "What is this tests title? ", "input"),
+        new InputQuestion("testDescr", "Add a description of this test: ", "input"),
+        new InputQuestion("testRun", "Add steps to run this test (assuming user has fully installed the application)\nSeparate each step like so (>>): ", "input"),
+        new InputQuestion("promptMoreTests", "Are there other tests you would add? ", "confirm")
+    ],
+    // Questions
+    promptQuestions: [
+        new InputQuestion("addQuestionsInfo", "Where should users direct any questions?\n Here you can detail your contact information ", "confirm"),
+        // Add Users USERname
+        // Add Users github URL link
+        // Add Users email
+        new InputQuestion("promptTitle", "Would you like to add a placeholder for this email? ", "confirm"),
+        // Add placeholder
+    ],
     // Extras
     promptExtras: [
         new InputQuestion("addExtras", "Would you like to add any additional information or sections?\n (A title for Extras will be passed to the README.md file created to enter additional information) ", "confirm"),
     ],
-    promptHomeLink: [
+    promptHomePage: [
         new InputQuestion("addHomePage", "It is recommended if you have an online web page to add an image and link for it. Add now? ", "confirm"),
+    ],
+    promptHomeLink: [
         new InputQuestion("addHomePageTitle", "Create a title describing the location or relevance of this image: ", "input"),
         new InputQuestion("addHomePageLink", "Add the image link: ", "input")
     ]
@@ -184,24 +206,33 @@ const promptDescription = () => {
     .then((answers) => {
         answersArr.push(answers)
         console.log(" Add information pertaining to any requirements for this application to run");
-        console.log(" (Here you can specify to a user (not a developer), what is required to run this application, if they so desire and it is permissible)");
+        console.log(" (Here you can specify to a user (not specifically a developer), what is required to run this application, if they so desire and it is permissible)");
         console.log(" (Note these requirements and consider adding badges later to indicate these requirements)");
         requirements()
     })
 }
+const requireSection = {
+    addRequired: false,
+    requirements: ""
+}
 // Prompt user for requirements
 const requirements = () => {
-    inquirer.prompt(questions.requiredPrograms)
+    inquirer.prompt(questions.requiredPrompt)
     .then((answers) => {
         if (answers.requirementsSection) {
-            answersArr.push({
-                addRequired: true,
-                requirements: answers.required
-            })
-            furtherDevelopment();
+            requireSection.addRequired = true;
+            addRequiredSection();
         } else {
             furtherDevelopment();
         }
+    })
+}
+const addRequiredSection = () => {
+    inquirer.prompt(questions.requiredPrograms)
+    .then((answers) => {
+        requireSection.requirements = answers.required;
+        answersArr.push(requireSection)
+        furtherDevelopment();
     })
 }
 // Prompt Further Development Details
@@ -565,7 +596,7 @@ const promptFeatures = () => {
             featuresInfo.addFeatures = true;
             addFeatures();
         } else {
-            extraSections();
+            testsSection(); 
         }
     }) 
 }
@@ -580,6 +611,37 @@ const addFeatures = () => {
             addFeatures()
         } else {
             answersArr.push(featuresInfo);
+            testsSection(); 
+        }
+    }) 
+}
+const testsInfo = {
+    addTests: false,
+    tests: []
+}
+const testsSection = () => {
+    inquirer.prompt(questions.promptTests)
+    .then((answers) => {
+        if (answers.addTests) {
+            testsInfo.addTests = true;
+            addTestsSection();
+        } else {
+            extraSections();
+        }
+    }) 
+}
+const addTestsSection = () => {
+    inquirer.prompt(questions.addTests)
+    .then((answers) => {
+        testsInfo.tests.push({
+            testTitle: answers.testTitle,
+            testDescr: answers.testDescr,
+            testSteps: answers.testRun
+        });
+        if (answers.promptMoreTests) {
+            addTestsSection();
+        } else {
+            answersArr.push(testsInfo);
             extraSections();
         }
     }) 
@@ -591,6 +653,7 @@ const extraSections = () => {
             answersArr.push({addExtras: true});
             addHomePage();
         } else {
+            answersArr.push({addExtras: false});
             addHomePage();
         }
     }) 
@@ -599,17 +662,23 @@ const homePageInfo = {
     addhomePage: false
 }
 const addHomePage = () => {
-    inquirer.prompt(questions.promptHomeLink)
+    inquirer.prompt(questions.promptHomePage)
     .then((answers) => {
         if (answers.addHomePage) {
-            homePageInfo.homePageTitle = answers.addHomePageTitle;
-            homePageInfo.homePageLink = answers.addHomePageLink;
             homePageInfo.addhomePage = true;
-            answersArr.push(homePageInfo);
-            checkTable();
+            addHomeLink();
         } else {
             checkTable();
         }
+    }) 
+}
+const addHomeLink = () => {
+    inquirer.prompt(questions.promptHomeLink)
+    .then((answers) => {
+        homePageInfo.homePageTitle = answers.addHomePageTitle;
+        homePageInfo.homePageLink = answers.addHomePageLink;
+        answersArr.push(homePageInfo);
+        checkTable();
     }) 
 }
 const checkTable = () => {
