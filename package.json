@@ -1,0 +1,22 @@
+{
+  "name": "develop",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">![License: MIT](https://img.shields.io/github/license/adonisjs/adonis-framework?style=for-the-badge)(https://opensource.org/licenses/MIT) ![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)(https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md)</div>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/origin-42/readme-generator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/origin-42/readme-generator/issues"
+  },
+  "homepage": "https://github.com/origin-42/readme-generator#readme",
+  "dependencies": {
+    "inquirer": "^8.2.2"
+  }
+}
