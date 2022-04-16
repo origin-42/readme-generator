@@ -1,11 +1,12 @@
-# <div align="center">
+<div align="center">
 
-Readme Generator
-
-<div>
+# Readme Generator
+  
+</div>
 
 <div align="center">
 
+  
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md) 
 
 </div>
@@ -52,19 +53,28 @@ Node will be required to this this application on a local terminal.
 * [How to Use](#how-to-use)
 * [Credits](#credits)
 * [Contribution](#contribution)
-* [Features](#features)
 * [Questions](#questions)
 
 ## Installation
 
 ```
 git clone {HTTPS}
-to remove
 ```
+Open file in preferred file edittor.
+Refer to "How to Use"
 
 ## How to Use
 
 Download application from Github and install dependancies, node and inquirer.
+
+```
+npm i
+npm i inquirer
+```
+
+### How to Run Application
+
+![snippet](${photo.howToUseImagesLink}) // Video
 
 ## Credits
 
@@ -79,11 +89,13 @@ Any additions detailed from "Further Developments" section are welcome.
 ### How to Contribute
 
 ```
-git clone {URL}
-npm init
-npm install inquirer
-npm i
+git init
+git branch -b {branch_name}
+git push -u origin {branch_name}
 ```
+
+create pull request
+Describe additions and what this will address
 
 ## Questions
 
@@ -94,7 +106,7 @@ Direct any questions too;
 
 ## Extras
 
-[What to Expect whilst Running Application](./utils/images/generator_screenshot.jpg)
+[What to Expect Whilst This Running Application](./utils/images/generator_screenshot.jpg)
 
-![snippet](./utils/images/generator_screenshot.jpg)
+![snippet](./utils/screenshots/generator_screenshot.jpg)
 
