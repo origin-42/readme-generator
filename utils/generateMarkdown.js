@@ -224,7 +224,7 @@ function generateMarkdown(data) {
   // Check steps required and pass to render
   data.forEach(step => {
     if (step.title) {
-      unformattedTemplate.push(`# <div align="center">\n\n${step.title}\n\n<div>\n\n`);
+      unformattedTemplate.push(`<div align="center">\n\n# ${step.title}\n\n</div>\n\n\n`);
       unformattedTemplate.push(`## Further Development\n\n ### Motivation\n\n${step["description-motivation"]}\n\n`);
       unformattedTemplate.push(`### Problem\n\n${step["description-problem"]}\n\n`);
       unformattedTemplate.push(`### Information\n\n${step["description-learned"]}\n\n`);
