@@ -80,6 +80,14 @@ npm i inquirer
 
 [Regular Expressions for Email](https://www.simplilearn.com/tutorials/javascript-tutorial/email-validation-in-javascript): simplilearn.com
 
+[Screen Capture](https://www.screencapture.com/): Used to Develop this Video
+
+[Badges](https://github.com/aleen42/badges): [aleen42](https://github.com/aleen42/): Usage of Badges
+
+[Contributor Covenant](https://www.contributor-covenant.org/)
+
+[Choose a License](https://choosealicense.com/): Licenses for distribution of software
+
 [Origin-42](https://github.com/origin-42): Dave Plummer
 
 ## Contribution
