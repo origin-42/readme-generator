@@ -154,6 +154,9 @@ const questions = {
         new InputQuestion("howToUseVideoTitle", "Add a title to use for your README: ", "input", "How to Use: ", function (input) {
             return handleExceptions(input, "Readme title missing");
         }),
+        new InputQuestion("howToUseImageOverlay", "Include an image to overlay on your video: ", "input", "How to Use: ", function (input) {
+            return handleExceptions(input, "Image link missing", "link");
+        }),
         new InputQuestion("howToUseVideoLink", "Add a link that points to your video location (online or by relative path): ", "input", "How to Use: ", function (input) {
             return handleExceptions(input, "Video link missing", "link");
         })
@@ -511,6 +514,7 @@ let howToUseVideo = () => {
         usageSection.usageDetails.video.push({
             howToUseVideoText: answers.howToUseVideoText,
             howToUseVideoTitle: answers.howToUseVideoTitle,
+            howToUseVideoOverlay: answers.howToUseImageOverlay,
             howToUseVideoLink: answers.howToUseVideoLink
         });
         answersArr.push(usageSection);
@@ -864,3 +868,4 @@ function init() {
 
 // Function call to initialize app
 init();
+
