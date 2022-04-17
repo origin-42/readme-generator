@@ -71,7 +71,7 @@ npm i
 npm i inquirer
 ```
 
-### How to Run Application
+### How to Run Application - Click Image to Redirect
 
 [![ReadmeGenerator](./utils/screenshots/thumbnail.jpg)](https://youtu.be/GcAtN6wYZwQ "Link Title")
 
