@@ -201,7 +201,7 @@ const questions = {
 
     // Get Badges
     promptBadges: [
-        new InputQuestion("addBadges", "Are there any badges to add? ", "confirm", "Badges: ")
+        new InputQuestion("addBadges", "Are there any badges to add?\n\nA list of badges can be found here https://github.com/aleen42/badges ", "confirm", "Badges: ")
     ],
     createBadges: [
         new InputQuestion("customBadgeName", "Add badge name", "input", "Badges: ", function (input) {
