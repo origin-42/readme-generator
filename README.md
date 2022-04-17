@@ -56,9 +56,13 @@ Node will be required to this this application on a local terminal.
 
 ## Installation
 
+
 ```
-git clone {HTTPS}
+Copy github URL path
+CLONE;
+git clone {url} (open inside text editor)
 ```
+
 Open file in preferred file edittor.
 Refer to "How to Use"
 
@@ -66,9 +70,11 @@ Refer to "How to Use"
 
 Download application from Github and install dependancies, node and inquirer.
 
+
 ```
-npm i
-npm i inquirer
+open console {crtl `}
+enter: {npm i inquirer} - install inquirer
+enter: {node index.js} - run generator
 ```
 
 ### How to Run Application - Click Image to Redirect
