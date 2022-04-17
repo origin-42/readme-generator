@@ -89,14 +89,14 @@ function generateMarkdown(data) {
           howToUse.push(`### ${photo.howToUseImagesTitle}\n\n`);
           howToUse.push(`${photo.howToUseImagesText}\n\n`);
           howToUse.push(`![snippet](${photo.howToUseImagesLink})\n\n`);
-        })
+        });
         step.usageDetails.video.forEach(video => {
           howToUse.push(`### ${video.howToUseVideoTitle}\n\n`);
           howToUse.push(`${video.howToUseVideoText}\n\n`);
-          howToUse.push(`![snippet](${video.howToUseVideoLink})\n\n`);
-        })
-      }
-    })
+          howToUse.push(`[![${video.howToUseVideoTitle}](${video.howToUseImageOverlay})](${video.howToUseVideoLink})\n\n`);
+        });
+      };
+    });
     return howToUse.join("");
   }
   // Add information on credits
@@ -108,9 +108,9 @@ function generateMarkdown(data) {
           creditsArr.push(`[${cred.creditTitle}]`);
           creditsArr.push(`(${cred.creditLink}): `);
           creditsArr.push(`${cred.creditDescr}\n\n`);
-        })
-      }
-    })
+        });
+      };
+    });
     return creditsArr.join("");
   };
   // Add information for Licenses
@@ -120,8 +120,8 @@ function generateMarkdown(data) {
       if (step.addLicenseInfo) {
         step.licenses.customLicenses.forEach(license => {
           licenses.push(`* [${license.customLicenseName}](${license.customLicenseLink})\n\n`);
-        })
-        handleBadges([step.licenses.listLicenses.badge])
+        });
+        handleBadges([step.licenses.listLicenses.badge]);
       };
     });
     return licenses.join("");
@@ -154,7 +154,7 @@ function generateMarkdown(data) {
       };
     });
     return contributionArr.join("");
-  }
+  };
   // Handle Features Section
   const handleFeatures = () => {
     let featuresArr = [`## Features\n\n`];
@@ -169,7 +169,7 @@ function generateMarkdown(data) {
     });
     featuresArr.push(featureArr.join(""));
     return featuresArr.join("");
-  }
+  };
   // Handle Tests Section
   const handleTests = () => {
     let testsArr = [`## Tests\n\n`];
@@ -180,13 +180,13 @@ function generateMarkdown(data) {
           let splitTestsArr = test.testSteps.split(">>");
           splitTestsArr.forEach(testSplit => {
             testsArr.push(`${testSplit}\n`);
-          })
+          });
           testsArr.push("```\n\n");
         });
       };
     });
     return testsArr.join("");
-  }
+  };
   // Handle Questions Section
   const handleQuestions = () => {
     let questionsArr = [`## Questions\n\nDirect any questions too;\n\n`];
