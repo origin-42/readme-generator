@@ -12,17 +12,7 @@
 </div>
 
 
-### Motivation
-
-Uploading many projects online requires a lot of time writing and remembering information to include in a readme, whilst also ensuring correct formatting. Here we can simply type the desired information and formatting will be completed consistently, whilst ensuring all information is entered.
-
-### Problem
-
-Saves time searching for information that will be the same everytime. Ensures consistency across applications. Clean and presenteable README.md file. 
-
-### Information
-
-The purpose of this application additionally served to further my knowledge with the enquirer package for prompts made with node.js.
+Creating multiple repositories can be time consuming with the number of repositories developed. Here we can simply type the desired information and the formatting will be completed automatically, whilst ensuring formatting is consistent. This will save time searching for information that will be the same everytime, ensuring consistency across all applications, creating a clean and presenteable README.md file.
 
 ## Requirements
 
@@ -119,7 +109,7 @@ Direct any questions too;
 
 ## Extras
 
-[What to Expect Whilst This Running Application](./utils/images/generator_screenshot.jpg)
+[Readme Generator Homepage](./utils/images/generator_screenshot.jpg)
 
 ![snippet](./utils/screenshots/generator_screenshot.jpg)
 
