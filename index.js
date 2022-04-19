@@ -1,4 +1,3 @@
-// TODO: Include packages needed for this application
 const fs = require("fs")
 const inquirer = require("./node_modules/inquirer")
 const fn = require("./utils/generateMarkdown")
@@ -7,7 +6,6 @@ const fn = require("./utils/generateMarkdown")
 let yellow = '\x1b[33m%s\x1b[0m'; //Confirmations and info prompts
 let redText = "\x1b[31m"; // Invalid input
 
-// TODO: Create an array of questions for user input
 class InputQuestion {
     constructor(name, message, type, prefix, validate) {
         this.name = name,
@@ -296,7 +294,6 @@ const questions = {
     ]
 };
 
-// TODO: Create a function to write README file
 function writeToFile(data) {
    
     let htmlTemplate = fn.generateMarkdown(data)
@@ -861,7 +858,6 @@ const checkTable = () => {
     }
 }
 
-// TODO: Create a function to initialize app
 function init() {
     promptDescription();
 };
