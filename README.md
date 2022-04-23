@@ -73,7 +73,7 @@ enter: {node index.js} - run generator
 
 ### How to Run Application - Click Image to Redirect
 
-[![ReadmeGenerator](./utils/screenshots/thumbnail.jpg)](https://youtu.be/GcAtN6wYZwQ "Link Title")
+[![ReadmeGenerator](./utils/screenshots/thumbnail.jpg)](https://youtu.be/GcAtN6wYZwQ)
 
 ## Credits
 
